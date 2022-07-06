@@ -1,10 +1,10 @@
+---
 - hosts: ansibleclient
   become: yes
-  tasks:
   vars:
     tomcat_download_url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.22/bin/apache-tomcat-10.0.22.tar.gz
     tomcat_download_location: /opt/tomcat10/
-
+  tasks:
     - name: update
       apt: update_cache=yes   
       ignore_errors: yes 
