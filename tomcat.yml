@@ -53,9 +53,3 @@
         enabled: yes
         daemon_reload: yes
       when: ansible_service_mgr == "systemd"
-    - name: copy jar file
-      command: cp {{ remote_jarfile }} {{ remote_webapps }}
-      notify: start tomcat
-  handlers:
-    - name: start tomcat
-      service: name=tomcat state=started
