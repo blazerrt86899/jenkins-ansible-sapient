@@ -18,7 +18,7 @@
     - name: Installating curl.
       apt: name=curl state=latest
       
-     - name: Create a tomcat directory
+    - name: Create a tomcat directory
       file:
         path: "{{tomcat_download_location}}"
         owner: tomcat
