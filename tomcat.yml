@@ -3,7 +3,9 @@
   become: yes
   vars:
     tomcat_download_url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.22/bin/apache-tomcat-10.0.22.tar.gz
-    tomcat_download_location: /opt/tomcat10/
+    tomcat_download_location: /opt/tomcat10/i
+    remote_jarfile: /jenkins-ansible-sapient/target/websocket-demo-0.0.1-SNAPSHOT.jar
+    remote_webapps: /opt/tomcat10/tomcat/webapps/
   tasks:
     - name: update
       apt: update_cache=yes   
@@ -44,9 +46,16 @@
       get_url:
         url: https://raw.githubusercontent.com/aftab70/Apache_Tomcat/master/tomcat_services
         dest: /etc/systemd/system/tomcat.service
- 
-    - name: Deamon reload.
-      command: systemctl daemon-reload
- 
-    - name: Starting Apache Tomcat service.
+    - name: Starting Apache Tomcat service
+      service:
+        name: tomcat
+        state: started
+        enabled: yes
+        daemon_reload: yes
+      when: ansible_service_mgr == "systemd"
+    - name: copy jar file
+      command: cp {{ remote_jarfile }} {{ remote_webapps }}
+      notify: start tomcat
+  handlers:
+    - name: start tomcat
       service: name=tomcat state=started
